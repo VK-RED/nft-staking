@@ -9,3 +9,4 @@ crate-type = ["cdylib", "lib"]
 [dependencies]
 borsh = {version = "1.5.7", features = ["derive"]}
 solana-program = "2.2.1"
+spl-token = {version = "8.0.0", features = ["no-entrypoint"]}
