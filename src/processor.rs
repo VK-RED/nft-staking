@@ -10,6 +10,7 @@ use crate::instruction;
 
 pub enum StakingInstruction {
     Initialize, 
+    Stake,
 }
 
 impl StakingInstruction {
@@ -20,6 +21,9 @@ impl StakingInstruction {
         match *variant {
             0 => {
                 Ok(Self::Initialize)
+            },
+            1 => {
+                Ok(Self::Stake)
             },
             _ => {
                 msg!("No Instruction is set for the variant : {}", variant);
@@ -39,6 +43,10 @@ pub fn process_instruction(
 
         StakingInstruction::Initialize => {
             instruction::init_staking(program_id, accounts_info)?
+        }
+
+        StakingInstruction::Stake =>{ 
+            instruction::stake(program_id, accounts_info)?
         }
 
     }
