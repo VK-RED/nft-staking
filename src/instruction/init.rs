@@ -81,19 +81,15 @@ pub fn init_staking(program_id: &Pubkey,accounts: &[AccountInfo]) -> ProgramResu
 
     msg!("Successfully Created Stake Details Account");
 
-    // TODO: WRITE DETAILS IN STAKE DETAILS ACCOUNT
-
     let stake_details = StakeDetails{
-        collection_mint: collection_mint.key.clone(),
-        creator: user.key.clone(),
-        reward_token_mint: reward_mint.key.clone(),
+        creator: *user.key,
+        reward_token_mint: *reward_mint.key,
+        collection_mint: *collection_mint.key,
     };
 
-    let mut serialized = stake_details.get_serialized()?;
+    stake_details.serialize(&mut *stake_details_acc.data.borrow_mut())?;
 
-    stake_details_acc.data.borrow().serialize(&mut serialized)?;
-
-    // change mint authority of reward mint to stake_details_account;
+    msg!("Successfully written stake_details in onchain");
 
     let mint_authority_ix = set_authority(
         token_program.key, 
