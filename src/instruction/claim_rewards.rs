@@ -32,6 +32,16 @@ pub fn claim_rewards(program_id: &Pubkey, accounts_info:&[AccountInfo]) -> Progr
     // mint reward tokens to the user_reward_token_account
     // update the staked at field
 
+    if stake_account.owner != program_id {
+        msg!("Stake Account not owned by the program");
+        return Err(ProgramError::InvalidAccountOwner);
+    }
+
+    if stake_details_account.owner != program_id {
+        msg!("Stake Details Account not owned by the Program");
+        return Err(ProgramError::InvalidAccountOwner);
+    }
+
     let seeds = [
         b"stake", 
         stake_details_account.key.as_ref(), 
