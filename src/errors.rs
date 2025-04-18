@@ -20,6 +20,12 @@ pub enum NftStakingError{
 
     #[error("Account is not Initialized")]
     AccountNotInitialized,
+
+    #[error("No NFT found in the Stake NFT token account")]
+    NoNFTFound,
+
+    #[error("Lamports overflow occurred while closing Stake Account")]
+    StakeAccountCloseError,
 }
 
 impl From<NftStakingError> for ProgramError{

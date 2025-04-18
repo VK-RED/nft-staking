@@ -11,7 +11,8 @@ use crate::instruction;
 pub enum StakingInstruction {
     Initialize, 
     Stake,
-    ClaimRewards
+    ClaimRewards,
+    UnStake
 }
 
 impl StakingInstruction {
@@ -28,6 +29,9 @@ impl StakingInstruction {
             },
             2 => {
                 Ok(Self::ClaimRewards)
+            },
+            3 => {
+                Ok(Self::UnStake)
             },
             _ => {
                 msg!("No Instruction is set for the variant : {}", variant);
@@ -57,6 +61,9 @@ pub fn process_instruction(
             instruction::claim_rewards(program_id, accounts_info)?
         }
 
+        StakingInstruction::UnStake => {
+            instruction::unstake(program_id, accounts_info)?
+        }
     }
 
     
