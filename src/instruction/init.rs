@@ -41,7 +41,7 @@ pub fn init_staking(program_id: &Pubkey,accounts: &[AccountInfo]) -> ProgramResu
     let system_program = next_account_info(iter)?;
 
     // create a pda 
-    let (stake_details_key, stake_acc_bump) = Pubkey::find_program_address(
+    let (stake_details_key, stake_details_bump) = Pubkey::find_program_address(
         &[b"stake_details", 
         user.key.as_ref(), 
         collection_mint.key.as_ref()],
@@ -71,7 +71,7 @@ pub fn init_staking(program_id: &Pubkey,accounts: &[AccountInfo]) -> ProgramResu
     );
 
     let account_infos = [user.clone(), stake_details_acc.clone(), system_program.clone()];
-    let seeds = [b"stake_details", user.key.as_ref(), collection_mint.key.as_ref(), &[stake_acc_bump]];
+    let seeds = [b"stake_details", user.key.as_ref(), collection_mint.key.as_ref(), &[stake_details_bump]];
 
     invoke_signed(
         & instruction, 
@@ -85,6 +85,7 @@ pub fn init_staking(program_id: &Pubkey,accounts: &[AccountInfo]) -> ProgramResu
         creator: *user.key,
         reward_token_mint: *reward_mint.key,
         collection_mint: *collection_mint.key,
+        bump_seed: stake_details_bump
     };
 
     stake_details.serialize(&mut *stake_details_acc.data.borrow_mut())?;
