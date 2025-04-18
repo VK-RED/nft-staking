@@ -16,7 +16,10 @@ pub enum NftStakingError{
     NftNotVerified,
 
     #[error("No NFT found in the Token Account")]
-    NftEmpty
+    NftEmpty,
+
+    #[error("Account is not Initialized")]
+    AccountNotInitialized,
 }
 
 impl From<NftStakingError> for ProgramError{
