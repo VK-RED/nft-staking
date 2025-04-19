@@ -3,7 +3,7 @@
 ### Setup Guide
 - Clone the Project.
 - Start the Local Validator ```solana-test-validator```
-- Navigate to native directory ```cd native```
+- Navigate to project directory ```cd nft-staking```
 - Build the Project ```cargo build-sbf```
 - Load the **Metaplex Program** to the Local Validator:
 		- ```solana program dump -um metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s ./target/deploy/nft_staking_native.so```
