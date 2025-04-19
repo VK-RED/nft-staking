@@ -13,23 +13,44 @@ pub fn stake(
 
     let iter = &mut accounts.iter();
 
-    // signer and writable
     let user = next_account_info(iter)?;
+    if !user.is_signer || !user.is_writable {
+        msg!("User account is not signer or writable");
+        return Err(ProgramError::InvalidAccountData);
+    }
 
     let nft_mint = next_account_info(iter)?;
     let nft_metadata_account = next_account_info(iter)?; // metadata account of the staking nft
 
-    // writable
     let user_token_account = next_account_info(iter)?; // nft token account of user
+
+    if !user_token_account.is_writable {
+        msg!("User Token Account is not writable");
+        return Err(ProgramError::InvalidAccountData);
+    }
+
     let user_reward_token_account = next_account_info(iter)?; // reward token account for the user
 
     let stake_details_account = next_account_info(iter)?; 
 
-    // signer and writable
-    let stake_account = next_account_info(iter)?; // pda
-    // signer and writable
-    let stake_ata = next_account_info(iter)?; // ata of the stake account to store the user nft
+    if stake_details_account.owner != program_id {
+        msg!("Stake Details Account is not owned by the program");
+        return Err(ProgramError::InvalidAccountData);
+    }
 
+    let stake_account = next_account_info(iter)?; // pda
+
+    if !stake_account.is_writable {
+        msg!("Stake account is not writable");
+        return Err(ProgramError::InvalidAccountData);
+    }
+
+    let stake_ata = next_account_info(iter)?; // ata of the stake account to store the user nft
+    
+    if !stake_ata.is_writable {
+        msg!("Stake ATA is not writable");
+        return Err(ProgramError::InvalidAccountData);
+    }
 
     let token_program = next_account_info(iter)?;
     let associated_token_program = next_account_info(iter)?;

@@ -9,28 +9,43 @@ pub fn claim_rewards(program_id: &Pubkey, accounts_info:&[AccountInfo]) -> Progr
 
     let iter = &mut accounts_info.iter();
 
-    // Signer
     let user_account = next_account_info(iter)?;
 
-    // Writable
+    if !user_account.is_signer {
+        msg!("User account is not a signer");
+        return Err(ProgramError::MissingRequiredSignature);
+    }
+
     let stake_account = next_account_info(iter)?;
     
-    // Writable
-    let user_reward_token_account = next_account_info(iter)?;
+    if !stake_account.is_writable {
+        msg!("Stake account is not writable");
+        return Err(ProgramError::InvalidAccountData);
+    }
 
-    // Writable
+    if stake_account.owner != program_id {
+        msg!("Stake account is not owned by the program");
+        return Err(ProgramError::InvalidAccountData);
+    }
+    
+    let user_reward_token_account = next_account_info(iter)?;
+    
+    if !user_reward_token_account.is_writable {
+        msg!("User Reward Token Account is not writable");
+        return Err(ProgramError::InvalidAccountData);
+    }
+
     let reward_mint_account = next_account_info(iter)?;
+    
+    if !reward_mint_account.is_writable {
+        msg!("Reward Mint Account is not writable");
+        return Err(ProgramError::InvalidAccountData);
+    }
+
     let stake_details_account = next_account_info(iter)?;
     
     let nft_mint_account = next_account_info(iter)?;
     let token_program = next_account_info(iter)?;
-
-    // check its a valid stake account'
-    // check stake account is initialized
-
-    // check user reward token account exists and matches with that in the stake account
-    // mint reward tokens to the user_reward_token_account
-    // update the staked at field
 
     if stake_account.owner != program_id {
         msg!("Stake Account not owned by the program");

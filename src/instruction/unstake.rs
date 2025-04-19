@@ -32,9 +32,19 @@ pub fn unstake(program_id: &Pubkey, accounts:&[AccountInfo]) -> ProgramResult{
 
     let stake_details_account = next_account_info(iter)?;
 
+    if stake_details_account.owner != program_id {
+        msg!("Stake Details Account is not owned by the program");
+        return Err(ProgramError::InvalidAccountData);
+    }
+
     let stake_account = next_account_info(iter)?;
     if !stake_account.is_writable {
         msg!("Stake Account is Not Writable");
+        return Err(ProgramError::InvalidAccountData);
+    }
+
+    if stake_account.owner != program_id {
+        msg!("Stake Account is not owned by the program");
         return Err(ProgramError::InvalidAccountData);
     }
 
